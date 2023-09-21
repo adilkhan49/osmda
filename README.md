@@ -1,7 +1,26 @@
 # Open Source Modern Data Architecture
 
 
-## MARIADB SET UP
+THe objective of this project is to build an architecture based on Trino. 
+
+## Archicture
+
+- MariaDB Source Database with the Northwind dataset loaded
+- 3 worker Trino cluster
+
+Next Steps:
+
+- Add more data sources (flat file, APIs, DWH)
+- Visualisation with Grafana
+- Data Processing with DBT
+- Orchestration with Airflow
+
+
+## Set up
+
+### MARIADB
+
+NB: Set up instructions are for Mac
 
 
 ```
@@ -14,8 +33,7 @@ mysql -e "CREATE USER 'dev'@localhost IDENTIFIED BY 'pwd'"
 mysql -e "GRANT ALL PRIVILEGES ON northwind.* TO 'dev'@localhost" 
 ```
 
-
-## START TRINO CLUSTER
+### TRINO CLUSTER
 
 ```
 docker-compose up --scale trino-worker=3
