@@ -1,0 +1,22 @@
+version: "3.9"
+   
+services:
+  trino-coordinator:
+    image: 'trinodb/trino:latest'
+    ports:
+      - '8080:8080'
+    volumes:
+      - $PWD//trino/coordinator/etc:/etc/trino:ro
+    networks:
+      - trino-network
+
+  trino-worker:
+    image: 'trinodb/trino:latest'
+    volumes:
+      - $PWD/trino/worker/etc:/etc/trino:ro
+    networks:
+      - trino-network
+
+networks:
+  trino-network:
+    driver: bridge  
