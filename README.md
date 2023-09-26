@@ -33,6 +33,39 @@ mysql -e "CREATE USER 'dev'@localhost IDENTIFIED BY 'pwd'"
 mysql -e "GRANT ALL PRIVILEGES ON northwind.* TO 'dev'@localhost" 
 ```
 
+### Windows
+Download the file
+```
+curl --output northwind-dump.sql --url https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql
+```
+
+### Docker setup for Windows if MariaDB cannot be downloaded
+Go into docker compose file
+```
+cd docker\maria_db\docker-compose.yml
+```
+Run docker compose file to set up mariadb and adminer 
+```
+docker-compose up -d
+```
+
+Load docker to run MariaDB through CLI
+```
+docker exec -it [3 line container id, e.g 31c] sh 
+apt-get update -y
+apt-get install wget -y
+wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql -O northwind-dump.sql
+mariadb -u root -proot_password -p northwind < northwind-dump.sql
+mariadb -u root -p
+```
+
+In MariaDB
+```
+CREATE USER 'dev' IDENTIFIED BY 'pwd';
+GRANT ALL PRIVILEGES ON northwind.* TO 'dev';
+```
+
+
 ### TRINO CLUSTER
 
 ```
