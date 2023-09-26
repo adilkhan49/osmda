@@ -54,6 +54,7 @@ Load docker to run MariaDB through CLI
 docker exec -it [3 line container id, e.g 31c] sh 
 apt-get update -y
 apt-get install wget -y
+wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql -O northwind-dump.sql
 mariadb -u root -proot_password -p northwind < northwind-dump.sql
 mariadb -u root -p
 ```
