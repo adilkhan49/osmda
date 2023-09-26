@@ -18,7 +18,7 @@ Next Steps:
 
 ## Set up
 
-### MARIADB
+### 1) MARIADB
 
 NB: Set up instructions are for Mac
 
@@ -66,7 +66,7 @@ GRANT ALL PRIVILEGES ON northwind.* TO 'dev';
 ```
 
 
-### TRINO CLUSTER
+### 2) TRINO CLUSTER
 
 ```
 docker-compose up --scale trino-worker=3
