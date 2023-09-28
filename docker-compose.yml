@@ -6,17 +6,31 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - $PWD//trino/coordinator/etc:/etc/trino:ro
+      - ./trino/coordinator/etc:/etc/trino:ro
     networks:
       - trino-network
 
   trino-worker:
     image: 'trinodb/trino:latest'
     volumes:
-      - $PWD/trino/worker/etc:/etc/trino:ro
+      - ./trino/worker/etc:/etc/trino:ro
     networks:
       - trino-network
+
+  mariadb:
+    build: ./mariadb
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+    ports:
+      - "3306:3306"     
+ 
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - 7777:8080
 
 networks:
   trino-network:
     driver: bridge  
+

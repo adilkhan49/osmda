@@ -1,2 +1,5 @@
 *dump.sql
 .venv
+mariadb/data
+mariadb/mnt
+env
