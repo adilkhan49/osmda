@@ -20,17 +20,76 @@ services:
   mariadb:
     build: ./mariadb
     volumes:
-      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/mnt:/mnt
+      - mariavol:/var/lib/mysql
     ports:
       - "3306:3306"     
- 
+
   adminer:
     image: adminer:latest
     container_name: adminer
     ports:
       - 7777:8080
 
+  hadoop-master:
+    image: 'ghcr.io/trinodb/testing/hdp3.1-hive:53'
+    hostname: hadoop-master
+    ports:
+      - '3305:3306' # Metastore MySQL Database
+      - '9083:9083' # Metastore Thrift
+      - '10000:10000' # HiveServer2
+    volumes:
+      - ./hadoop/conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+    networks:
+      - trino-network
+
+  minio:
+    image: 'minio/minio:latest'
+    hostname: minio
+    container_name: minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    volumes:
+      - minio:/data
+    command: server --console-address ":9001" /data
+    networks:
+      - trino-network
+
+  mc:
+    image: minio/mc:latest
+    container_name: mc
+    depends_on:
+      - minio
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    volumes:
+      - ./data:/mnt
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc config host add myminio http://minio:9000 minio minio123;
+      if [ \"`/usr/bin/mc ls myminio`\" == \"\" ]; then 
+         echo \"Creating bucket myminio/titanic\" && \
+         /usr/bin/mc mb myminio/titanic && \
+         /usr/bin/mc policy download myminio/titanic && \
+         /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet; 
+      else 
+         echo \"Bucket myminio/titanic already exists, skipping create\"; 
+      fi;
+      exit 0
+      "
+    networks:
+      - trino-network
+
 networks:
   trino-network:
     driver: bridge  
 
+volumes:
+  mariavol:
+  minio:
