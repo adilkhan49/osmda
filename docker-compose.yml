@@ -78,7 +78,7 @@ services:
          /usr/bin/mc mb myminio/titanic && \
          /usr/bin/mc mb myminio/northwind && \
          /usr/bin/mc policy download myminio/titanic && \
-         /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet
+         /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet && \
          /usr/bin/mc policy download myminio/northwind && \
          /usr/bin/mc cp /mnt/company_emails.csv myminio/northwind/company_emails/company_emails.csv; 
       else 
