@@ -1,7 +1,7 @@
 # Open Source Modern Data Architecture
 
 
-THe objective of this project is to build an architecture based on Trino. 
+The objective of this project is to build an architecture based on Trino. 
 
 ## Archicture
 
@@ -21,7 +21,8 @@ Next Steps:
 # Set up
 
 ```
-docker-compose up --scale trino-worker=3 --build
+docker-compose up --scale trino-worker=3 --build trino-coordinator trino-worker 
+docker-compose up --scale trino-worker=3 --builddo
 docker compose exec -it trino-coordinator  /usr/bin/trino --execute "SELECT * FROM system.runtime.nodes" --output-format=ALIGNED
 docker exec -it osmda-trino-coordinator-1  /usr/bin/trino
 ```
@@ -37,3 +38,7 @@ trino
 ```
 
 Alternatively connect using client (e.g. DBeaver)
+
+Run commands in demo.sql
+
+
