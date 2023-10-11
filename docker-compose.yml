@@ -9,6 +9,7 @@ services:
       - ./trino/coordinator/etc:/etc/trino:ro
     networks:
       - trino-network
+    restart: always
 
   trino-worker:
     image: 'trinodb/trino:latest'
@@ -16,6 +17,7 @@ services:
       - ./trino/worker/etc:/etc/trino:ro
     networks:
       - trino-network
+    restart: always
 
   mariadb:
     build: ./mariadb
@@ -31,30 +33,28 @@ services:
     ports:
       - 7777:8080
 
-  hadoop-master:
+  hive-metastore:
     image: 'ghcr.io/trinodb/testing/hdp3.1-hive:53'
-    hostname: hadoop-master
+    hostname: hive-metastore
     ports:
       - '3305:3306' # Metastore MySQL Database
       - '9083:9083' # Metastore Thrift
       - '10000:10000' # HiveServer2
     volumes:
-      - ./hadoop/conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+      - ./hive/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
     networks:
       - trino-network
 
   minio:
     image: 'minio/minio:latest'
-    hostname: minio
-    container_name: minio
-    ports:
-      - '9000:9000'
-      - '9001:9001'
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     volumes:
       - minio:/data
+    ports:
+      - '9000:9000'
+      - '9001:9001'
     command: server --console-address ":9001" /data
     networks:
       - trino-network
@@ -76,19 +76,32 @@ services:
       if [ \"`/usr/bin/mc ls myminio`\" == \"\" ]; then 
          echo \"Creating bucket myminio/titanic\" && \
          /usr/bin/mc mb myminio/titanic && \
+         /usr/bin/mc mb myminio/northwind && \
          /usr/bin/mc policy download myminio/titanic && \
+         /usr/bin/mc policy download myminio/northwind && \
          /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet; 
+         /usr/bin/mc cp /mnt/company_emails.csv myminio/northwind/company_emails/company_emails.csv; 
       else 
-         echo \"Bucket myminio/titanic already exists, skipping create\"; 
+         echo \"Buckets already exist, skipping create\"; 
       fi;
-      exit 0
+      sleep 1000
       "
     networks:
       - trino-network
+  # start:
+  #   image: ubuntu:20.04
+  #   command: tail -F anything
+  #   networks:
+  #     - hive-network
+
+
 
 networks:
   trino-network:
     driver: bridge  
+  hive-network:
+    driver: bridge  
+
 
 volumes:
   mariavol:

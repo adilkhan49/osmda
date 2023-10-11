@@ -16,61 +16,23 @@ Next Steps:
 - Orchestration with Airflow
 
 
-## Set up
 
-### MARIADB
-
-NB: Set up instructions are for Mac
-
+# Set up
 
 ```
-brew install mariadb
-brew services start mariadb
-mysql -e "CREATE OR REPLACE DATABASE northwind"
-wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql -O northwind-dump.sql
-mysql northwind < northwind-dump.sql
-mysql -e "CREATE USER 'dev'@localhost IDENTIFIED BY 'pwd'" 
-mysql -e "GRANT ALL PRIVILEGES ON northwind.* TO 'dev'@localhost" 
-```
-
-### Windows
-Download the file
-```
-curl --output northwind-dump.sql --url https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql
-```
-
-### Docker setup for Windows if MariaDB cannot be downloaded
-Go into docker compose file
-```
-cd docker\maria_db\docker-compose.yml
-```
-Run docker compose file to set up mariadb and adminer 
-```
-docker-compose up -d
-```
-
-Load docker to run MariaDB through CLI
-```
-docker exec -it osmda-db-1 sh 
-apt-get update -y
-apt-get install wget -y
-wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/northwindextended/Northwind.MySQL5.sql -O northwind-dump.sql
-mariadb -u root -proot_password -p northwind < northwind-dump.sql
-mariadb -u root -p
-```
-
-In MariaDB
-```
-CREATE USER 'dev' IDENTIFIED BY 'pwd';
-GRANT ALL PRIVILEGES ON northwind.* TO 'dev';
-```
-
-
-### TRINO CLUSTER
-
-```
-docker-compose up --scale trino-worker=3
-docker exec -it osmda-trino-coordinator-1  /usr/bin/trino --execute "SELECT * FROM system.runtime.nodes" --output-format=ALIGNED
+docker-compose up --scale trino-worker=3 --build
+docker compose exec -it trino-coordinator  /usr/bin/trino --execute "SELECT * FROM system.runtime.nodes" --output-format=ALIGNED
 docker exec -it osmda-trino-coordinator-1  /usr/bin/trino
 ```
 
+# Trino CLI
+
+```
+wget https://repo1.maven.org/maven2/io/trino/trino-cli/426/trino-cli-426-executable.jar -O ~/bin/trino
+chmod +x ~/bin/trino
+export PATH=~/bin:$PATH
+trino
+> SELECT * FROM system.runtime.nodes;
+```
+
+Alternatively connect using client (e.g. DBeaver)
