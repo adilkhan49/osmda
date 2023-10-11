@@ -77,14 +77,14 @@ services:
          echo \"Creating bucket myminio/titanic\" && \
          /usr/bin/mc mb myminio/titanic && \
          /usr/bin/mc mb myminio/northwind && \
-         /usr/bin/mc policy download myminio/titanic && \
+         /usr/bin/mc anonymous set public myminio/titanic && \
+         /usr/bin/mc anonymous set public myminio/northwind && \
          /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet && \
-         /usr/bin/mc policy download myminio/northwind && \
          /usr/bin/mc cp /mnt/company_emails.csv myminio/northwind/company_emails/company_emails.csv; 
       else 
          echo \"Buckets already exist, skipping create\"; 
       fi;
-      sleep 1000
+      sleep 200
       "
     networks:
       - trino-network
