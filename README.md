@@ -5,16 +5,17 @@ THe objective of this project is to build an architecture based on Trino.
 
 ## Archicture
 
-- MariaDB Source Database with the Northwind dataset loaded
 - 3 worker Trino cluster
+- MariaDB Source Database with the Northwind dataset loaded
+- MinIO Object Store with Hive Metastore and Titanic dataset loaded
+
 
 Next Steps:
 
-- Add more data sources (flat file, APIs, DWH)
+- Add more data sources (Snowflake, S3, Blob)
 - Visualisation with Grafana
 - Data Processing with DBT
 - Orchestration with Airflow
-
 
 
 # Set up
