@@ -3,3 +3,7 @@
 mariadb/data
 mariadb/mnt
 env
+minio
+.env
+.DS_Store
+*.ipynb
