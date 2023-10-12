@@ -6,17 +6,103 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - $PWD//trino/coordinator/etc:/etc/trino:ro
+      - ./trino/coordinator/etc:/etc/trino:ro
     networks:
       - trino-network
+    restart: always
 
   trino-worker:
     image: 'trinodb/trino:latest'
     volumes:
-      - $PWD/trino/worker/etc:/etc/trino:ro
+      - ./trino/worker/etc:/etc/trino:ro
     networks:
       - trino-network
+    restart: always
+
+  mariadb:
+    build: ./mariadb
+    volumes:
+      - ./mariadb/mnt:/mnt
+      - mariavol:/var/lib/mysql
+    ports:
+      - "3306:3306"     
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - 7777:8080
+
+  hive-metastore:
+    image: 'ghcr.io/trinodb/testing/hdp3.1-hive:53'
+    hostname: hive-metastore
+    ports:
+      - '3305:3306' # Metastore MySQL Database
+      - '9083:9083' # Metastore Thrift
+      - '10000:10000' # HiveServer2
+    volumes:
+      - ./hive/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
+    networks:
+      - trino-network
+
+  minio:
+    image: 'minio/minio:latest'
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    volumes:
+      - minio:/data
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    command: server --console-address ":9001" /data
+    networks:
+      - trino-network
+
+  mc:
+    image: minio/mc:latest
+    container_name: mc
+    depends_on:
+      - minio
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    volumes:
+      - ./data:/mnt
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc config host add myminio http://minio:9000 minio minio123;
+      if [ \"`/usr/bin/mc ls myminio`\" == \"\" ]; then 
+         echo \"Creating bucket myminio/titanic\" && \
+         /usr/bin/mc mb myminio/titanic && \
+         /usr/bin/mc mb myminio/northwind && \
+         /usr/bin/mc anonymous set public myminio/titanic && \
+         /usr/bin/mc anonymous set public myminio/northwind && \
+         /usr/bin/mc cp /mnt/titanic.parquet myminio/titanic/titanic.parquet && \
+         /usr/bin/mc cp /mnt/company_emails.csv myminio/northwind/company_emails/company_emails.csv; 
+      else 
+         echo \"Buckets already exist, skipping create\"; 
+      fi;
+      sleep 200
+      "
+    networks:
+      - trino-network
+  # start:
+  #   image: ubuntu:20.04
+  #   command: tail -F anything
+  #   networks:
+  #     - hive-network
+
+
 
 networks:
   trino-network:
     driver: bridge  
+  hive-network:
+    driver: bridge  
+
+
+volumes:
+  mariavol:
+  minio:

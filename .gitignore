@@ -1,9 +1,14 @@
 *dump.sql
 .venv
-.env
-
 dbt-dagster/northwind_dbt/profiles.yml
 
 dbt-dagster/target/
 dbt-dagster/dbt_packages/
 dbt-dagster/logs/
+mariadb/data
+mariadb/mnt
+env
+minio
+.env
+.DS_Store
+*.ipynb
