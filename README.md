@@ -18,6 +18,11 @@ Next Steps:
 
 ## Set up
 
+Install python dependencies
+```
+pip install -r requirements.txt
+```
+
 ### 1) MARIADB
 
 NB: Set up instructions are for Mac
@@ -74,3 +79,30 @@ docker exec -it osmda-trino-coordinator-1  /usr/bin/trino --execute "SELECT * FR
 docker exec -it osmda-trino-coordinator-1  /usr/bin/trino
 ```
 
+### 3) dbt Setup
+#### For local use dbt-core setup
+
+Initializing dbt
+```
+mkdir dbt-dagster
+cd dbt-dagster
+dbt init
+```
+
+- Project name: northwind_dbt
+- Please use the profiles.yml to set up connection between dbt and MariaDB (dbt-dagster\profiles.yml)
+
+
+### 4) Dagster
+
+Linking Dagster with dbt and creating a dagster project
+```
+dagster-dbt project scaffold --project-name northwind_dagster --dbt-project-dir '[Location of the dbt project]'
+```
+
+- workspace.ymal file can be used to link different project workspace. To be used for orchestration.
+
+To run dagster based on different workspaces/code spaces
+```
+dagster dev -w workspace.yaml
+```

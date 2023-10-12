@@ -1,5 +1,5 @@
 
-with clean_customer as (
+with clean_customers as (
     select 
         *,
         current_timestamp() as STAGED_AT
@@ -7,4 +7,4 @@ with clean_customer as (
 )
 
 select *
-from clean_customer
+from clean_customers

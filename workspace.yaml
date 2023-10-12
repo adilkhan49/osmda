@@ -1,0 +1,3 @@
+load_from:
+  # - python_file: extract_data\extract_main.py
+  - python_package: northwind_dagster.northwind_dagster.definitions
