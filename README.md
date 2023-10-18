@@ -44,3 +44,6 @@ Alternatively connect using client (e.g. DBeaver)
 Run commands in demo.sql
 
 
+# System
+
+Tested on MacBook Pro M2 Max 32GB and Docker: 10 CPUs, 12 GB Memory

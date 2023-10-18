@@ -9,7 +9,7 @@ services:
       - ./trino/coordinator/etc:/etc/trino:ro
     networks:
       - trino-network
-    restart: always
+    # restart: always
 
   trino-worker:
     image: 'trinodb/trino:latest'
@@ -17,7 +17,7 @@ services:
       - ./trino/worker/etc:/etc/trino:ro
     networks:
       - trino-network
-    restart: always
+    # restart: always
 
   mariadb:
     build: ./mariadb
@@ -27,11 +27,11 @@ services:
     ports:
       - "3306:3306"     
 
-  adminer:
-    image: adminer:latest
-    container_name: adminer
-    ports:
-      - 7777:8080
+  # adminer:
+  #   image: adminer:latest
+  #   container_name: adminer
+  #   ports:
+  #     - 7777:8080
 
   hive-metastore:
     image: 'ghcr.io/trinodb/testing/hdp3.1-hive:53'
@@ -84,7 +84,6 @@ services:
       else 
          echo \"Buckets already exist, skipping create\"; 
       fi;
-      sleep 200
       "
     networks:
       - trino-network
@@ -94,7 +93,13 @@ services:
   #   networks:
   #     - hive-network
 
-
+  postgres:
+    build: ./postgres
+    ports:
+      - 15432:5432
+    volumes:
+      - ./postgres/mnt:/mnt
+      - postgresvol:/var/lib/postgresql/data/
 
 networks:
   trino-network:
@@ -106,3 +111,4 @@ networks:
 volumes:
   mariavol:
   minio:
+  postgresvol:
