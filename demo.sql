@@ -1,5 +1,5 @@
 show catalogs;
-show schemas from northwind ;
+show schemas from mariadb ;
 show schemas from hive ;
 show schemas from iceberg ;
 
