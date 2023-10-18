@@ -23,9 +23,20 @@ Next Steps:
 ```
 docker-compose up --scale trino-worker=3 --build
 
-# Compose Trino only
+# Trino only
+brew 
 docker-compose up --scale trino-worker=3 --build trino-coordinator trino-worker 
+
+# Trino and MariaDB
+
+sh setup.sh mariadb 
+docker-compose up --scale trino-worker=3 --build trino-coordinator trino-worker mariadb -d
+
+# Check Status
+
 docker compose exec -it trino-coordinator  /usr/bin/trino --execute "SELECT * FROM system.runtime.nodes" --output-format=ALIGNED
+
+# Query 
 docker exec -it osmda-trino-coordinator-1  /usr/bin/trino
 ```
 

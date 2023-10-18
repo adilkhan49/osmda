@@ -9,7 +9,6 @@ services:
       - ./trino/coordinator/etc:/etc/trino:ro
     networks:
       - trino-network
-    restart: always
 
   trino-worker:
     image: 'trinodb/trino:latest'
@@ -17,7 +16,6 @@ services:
       - ./trino/worker/etc:/etc/trino:ro
     networks:
       - trino-network
-    restart: always
 
   mariadb:
     build: ./mariadb
