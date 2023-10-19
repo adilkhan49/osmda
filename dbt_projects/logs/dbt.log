@@ -1,0 +1,9 @@
+
+
+============================== 2023-10-19 08:24:43.149257 | 979fd849-3195-4f9d-9885-0b50756d337f ==============================
+08:24:43.149257 [info ] [MainThread]: Running with dbt=1.1.5
+08:24:43.149257 [debug] [MainThread]: running dbt with arguments {'write_json': True, 'use_colors': True, 'printer_width': 80, 'version_check': True, 'partial_parse': True, 'static_parser': True, 'profiles_dir': 'C:\\Users\\nthapa01\\.dbt', 'send_anonymous_usage_stats': True, 'event_buffer_size': 100000, 'quiet': False, 'no_print': False, 'cache_selected_only': False, 'project_name': 'northwind_dbt', 'skip_profile_setup': False, 'which': 'init', 'indirect_selection': 'eager'}
+08:24:43.149257 [debug] [MainThread]: Tracking: tracking
+08:24:43.184762 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F1885FAA60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F1885FAE20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F1885FAB20>]}
+08:24:43.186354 [debug] [MainThread]: Starter project path: c:\users\nthapa01\documents\1_personal_learning\5) projects\2)osmada\osmda\.venv\lib\site-packages\dbt\include\starter_project
+08:24:49.686872 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F183FE3F10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F18859BB20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001F18859BC70>]}

@@ -1,0 +1,12 @@
+northwind_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      server: localhost
+      port: 3306
+      database: northwind
+      schema: northwind
+      username: root
+      password: root_password
+      ssl_disabled: True
