@@ -7,3 +7,8 @@ minio
 .env
 .DS_Store
 *.ipynb
+
+# dbt related for northwind_dbt
+dbt_projects/northwind_dbt/target/
+dbt_projects/northwind_dbt/dbt_packages/
+dbt_projects/northwind_dbt/logs/
